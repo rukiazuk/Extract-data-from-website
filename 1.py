@@ -26,17 +26,17 @@ print(d2)
 SHIPMENTID = pyperclip.paste()
 pyperclip.copy(SHIPMENTID)
 
-PATH = "C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\Desktop\\webdriver\\chromedriver.exe"
+PATH = "C:\\chromedriverpath.exe"
 driver = webdriver.Chrome(PATH)
 
 options = webdriver.ChromeOptions() 
 options.add_argument("user-data-dir=C:\\Users\MartaBartkowiak\\OneDrive - Controlant hf\Desktop\webdriver\\newchrome")  #Path to your chrome profile
 
-driver = webdriver.Chrome(executable_path="C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\Desktop\\webdriver\\chromedriver.exe", chrome_options=options)
+driver = webdriver.Chrome(executable_path="C:\\chromedriverpath.exe", chrome_options=options)
 
 time.sleep(1)
 
-WEB = driver.get("https://scm.controlant.com/global/shipments/search/" + SHIPMENTID + "/chart?page=1")
+WEB = driver.get("https://pagepart1" + SHIPMENTID + "/pagepart2")
 driver.maximize_window()
 
 
@@ -54,7 +54,8 @@ time.sleep(5)
 driver.find_element(By.XPATH, "//button[@class='multi-select-button ng-binding']").click()
 LOGGERID1 = driver.find_element(By.XPATH, "//span[@class='item-label ng-binding']").text
 
-image_chart = driver.find_element(By.XPATH, "//div[@class='pane-frame']").screenshot("C:\\Users\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\test.png")
+#screenshot to path
+image_chart = driver.find_element(By.XPATH, "//div[@class='pane-frame']").screenshot("C:\\test.png")
 
 driver.find_element(By.XPATH, "//a[normalize-space()='Info']").click()
 
@@ -63,6 +64,7 @@ time.sleep(1)
 #data exctract
 SHIPPED = driver.find_element(By.CSS_SELECTOR, ".ng-binding.ng-scope[data-testid='span-shipment-shipped']").text
 
+#extract wanted date part
 ch = "2022"    
 stripped1 = SHIPPED.strip("Shipped")
 head, sep, tail = stripped1.partition(ch)
@@ -97,15 +99,7 @@ LOGGERID = driver.find_element(By.CSS_SELECTOR, "h2[class='ng-binding'] span[cla
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> second part
 
 
-#PATH = "C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\Desktop\\webdriver\\chromedriver.exe"
-#driver = webdriver.Chrome(PATH)
-
-#options = webdriver.ChromeOptions() 
-#options.add_argument("user-data-dir=C:\\Users\MartaBartkowiak\\OneDrive - Controlant hf\Desktop\webdriver\\newchrome2")  #Path to your chrome profile
-
-#driver = webdriver.Chrome(executable_path="C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\Desktop\\webdriver\\chromedriver.exe", chrome_options=options)
-
-driver.get("https://reseller.controlant.com/search/" + LOGGERID + "/device-info")
+driver.get("https://page2part1" + LOGGERID + "/page2part2")
 driver.maximize_window()
 
 #wait for page to load and element appear
@@ -149,7 +143,7 @@ def Screen():
     LTCropped = Image.open(BytesIO(LTScreen))
     #LTCropped = LTCropped.crop((20, 85, 2360, 940))    #everything, but too big
     LTCropped = LTCropped.crop((20, 85, 2360, 740))     #LT only
-    path2 = expanduser("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\")
+    path2 = expanduser("C:\\screens\\")
     LTCropped.save(path2 + "LT Screen.png")
 
 
@@ -162,7 +156,7 @@ def LT1ScreenMonths1():
     LT1Screen = driver.get_screenshot_as_png()
     LT1Cropped = Image.open(BytesIO(LT1Screen))
     LT1Cropped = LT1Cropped.crop((20, 85, 2360, 740))     #LT only
-    path3 = expanduser("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\")
+    path3 = expanduser("C:\\")
     LT1Cropped.save(path3 + "LT1.png")
 
 def LT2ScreenMonths2():
@@ -193,7 +187,7 @@ def LT2ScreenMonths2():
     LT2Screen = driver.get_screenshot_as_png()
     LT2Cropped = Image.open(BytesIO(LT2Screen))
     LT2Cropped = LT2Cropped.crop((20, 85, 2360, 740))     #LT only
-    path4 = expanduser("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\")
+    path4 = expanduser("C:screens\\")
     LT2Cropped.save(path4 + "LT2.png")
 
 #generate file
@@ -209,21 +203,13 @@ def GenerateDocxFile():
     document.add_paragraph(" ")
     document.add_paragraph("Data missing:")
     document.add_paragraph(" ")
+    document.add_paragraph("text1")
+    document.add_paragraph("text2")
 
-    #document.add_picture("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\scm.png")
+    document.save("C:\\screensdemo.docx")
 
-    document.add_paragraph("Logger temperature within normal boundaries. / Logger temperature dropped below operational boundaries on ")
-    
-    #document.add_picture("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\LT Screen.png")
-
-    document.add_paragraph("No probe failure events displayed.")
-
-    document.save("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\screensdemo.docx")
-
-lines = [LASTCHIN, OBD, ORIGIN + " / " + DESTINATION, " ",
-
- "Data missing: ", "Logger temperature within normal boundaries. / Logger temperature breached lower boundary of (-20,0°C) on ", "No probe failure events displayed."]
-with open("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\summary.txt", "w") as f:
+lines = [LASTCHIN, OBD, ORIGIN + " / " + DESTINATION, " ", "xxxxx", "xxxxaxaaaa", "aaaaaaaxxxx"]
+with open("C:\\summary.txt", "w") as f:
     for line in lines:
         f.write(line)
         f.write('\n')
@@ -236,15 +222,15 @@ LT1ScreenMonths1()
 LT2ScreenMonths2()
 
 
-with open("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\summary.txt") as f:
+with open("C:\\summary.txt") as f:
     data = f.read()
     pyperclip.copy(data)
 
 
-img1 = Image.open("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\test.png")
-img2 = Image.open("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\LT Screen.png")
-img3 = Image.open("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\LT1.png")
-img4 = Image.open("C:\\Users\\MartaBartkowiak\\OneDrive - Controlant hf\\Desktop\\New folder\\screens\\LT2.png")
+img1 = Image.open("C:\\test.png")
+img2 = Image.open("C:\\LT Screen.png")
+img3 = Image.open("C:\\LT1.png")
+img4 = Image.open("C:\\LT2.png")
 img1.show()
 img2.show()
 img3.show()
